@@ -58,9 +58,37 @@ exports.addProduct = async (req, res) => {
 // Get All Products (Public)
 exports.getProducts = async (req, res) => {
   try {
-    const products = await Product.find({ isActive: true })
-      .populate("categoryId", "name");
-    res.json(products);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const search = req.query.search || "";
+
+    const skip = (page - 1) * limit;
+
+    const query = {
+      $and: [
+        { isActive: true },
+        {
+          $or: [
+            { name: { $regex: search, $options: "i" } },
+            { sku: { $regex: search, $options: "i" } },
+            { price: isNaN(search) ? undefined : Number(search) }
+          ].filter(Boolean)
+        }
+      ]
+    };
+
+    const total = await Product.countDocuments(query);
+
+    const products = await Product.find(query)
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      products,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -87,17 +115,32 @@ exports.getProductById = async (req, res) => {
 // Update Product (Admin)
 exports.updateProduct = async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
+    const { name, description, price, categoryId, stock } = req.body;
+
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    // Update basic fields
+    product.name = name || product.name;
+    product.description = description || product.description;
+    product.price = price || product.price;
+    product.categoryId = categoryId || product.categoryId;
+    product.stock = stock || product.stock;
+
+    // If new images uploaded → replace
+    if (req.files && req.files.length > 0) {
+      product.images = req.files.map(
+        (file) => `/uploads/${file.filename}`
+      );
+    }
+
+    await product.save();
+
     res.json(product);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

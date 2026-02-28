@@ -1,41 +1,69 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
-    <nav className="bg-black text-white p-4">
-      <div className="container mx-auto flex justify-between">
-        <Link to="/" className="text-xl font-bold">
-          Soandita Jewels
-        </Link>
+    <nav className="flex justify-between items-center text-white p-4 bg-black shadow">
 
-        <div className="space-x-6">
-          <Link to="/shop">Shop</Link>
-        </div>
-        <div className="space-x-6">
-          <Link to="/cart">Cart</Link>
-        </div>
-        {user && <Link to="/orders">Orders</Link>}
+  <div className="flex gap-6">
+    <Link to="/">Home</Link>
 
-        {user ? (
-          <button onClick={logout}>Logout</button>
-        ) : (
-          <Link to="/login">Login</Link>
-        )}
+    {/* User Links */}
+    {user && user.role === "user" && (
+      <>
+        <Link to="/shop">Shop</Link>
+        <Link to="/cart">Cart</Link>
+        <Link to="/orders">My Orders</Link>
+      </>
+    )}
 
-        {user?.role === "admin" && (
-          <>
-            <Link to="/admin/dashboard">Dashboard</Link>
-            <Link to="/admin/returns">Returns</Link>
-            <Link to="/admin/add-product">Add Product</Link>
-            <Link to="/admin/products">Products</Link>
-          </>
-        )}
+    {/* Admin Links */}
+    {user && user.role === "admin" && (
+      <>
+        <Link to="/admin/dashboard">Dashboard</Link>
+        <Link to="/admin/products">Products</Link>
+        <Link to="/admin/returns">Returns</Link>
+      </>
+    )}
+  </div>
 
-      </div>
-    </nav>
-  );
-}
+  <div className="flex gap-4 items-center">
+
+    {!user && (
+      <>
+        <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
+      </>
+    )}
+
+    {user && (
+      <>
+        <span className="text-gray-600">
+          {user.role === "admin" ? "Admin" : user.name}
+        </span>
+
+        <button
+          onClick={handleLogout}
+          className="bg-black text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
+      </>
+    )}
+
+  </div>
+
+</nav>
+      );
+  }
 
 export default Navbar;

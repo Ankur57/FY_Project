@@ -25,7 +25,7 @@ router.post(
   upload.array("images", 5),
   addProduct
 );
-router.put("/update/:id", protect, adminOnly, updateProduct);
+router.put("/update/:id", protect, adminOnly, upload.array("images", 5),updateProduct);
 router.delete("/delete/:id", protect, adminOnly, deleteProduct);
 
 module.exports = router;

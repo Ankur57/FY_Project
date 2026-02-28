@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios";
 
+const IMAGE_BASE_URL = "http://localhost:5000";
+
 function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ function Shop() {
     const fetchProducts = async () => {
       try {
         const res = await axios.get("/products/get");
-        setProducts(res.data);
+        setProducts(res.data.products);
       } catch (err) {
         setError("Failed to load products");
       } finally {
@@ -36,7 +38,11 @@ function Shop() {
             className="border p-4 rounded shadow hover:shadow-lg transition"
           >
             <img
-              src={product.images?.[0] || "https://via.placeholder.com/300"}
+              src={
+                product.images && product.images.length > 0
+                  ? `${IMAGE_BASE_URL}${product.images[0]}`
+                  : "https://via.placeholder.com/300"
+              }
               alt={product.name}
               className="h-48 w-full object-cover mb-4"
             />

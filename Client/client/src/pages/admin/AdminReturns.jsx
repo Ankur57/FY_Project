@@ -34,7 +34,7 @@ function AdminReturns() {
     if (!comment) return;
 
     try {
-      await axios.put(`/orders/${id}/return/reject`, { comment });
+      await axios.put(`/orders/admin/orders/${id}/reject-return`, { comment });
       fetchReturns();
     } catch (error) {
       console.error(error);

@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
 
+const IMAGE_BASE_URL = "http://localhost:5000";
+
 
 function Product() {
   const { id } = useParams();
@@ -64,11 +66,15 @@ function Product() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
       {/* Product Image */}
       <div>
-        <img
-          src={product.images?.[0] || "https://via.placeholder.com/500"}
-          alt={product.name}
-          className="w-full h-[400px] object-cover rounded"
-        />
+            <img
+              src={
+                product.images && product.images.length > 0
+                  ? `${IMAGE_BASE_URL}${product.images[0]}`
+                  : "https://via.placeholder.com/300"
+              }
+              alt={product.name}
+              className="h-48 w-full object-cover mb-4"
+            />
       </div>
 
       {/* Product Info */}
