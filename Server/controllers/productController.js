@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Category = require("../models/Category");
 
 
 // Add Product (Admin)
@@ -20,11 +21,12 @@ exports.addProduct = async (req, res) => {
       });
     }
 
-    // Generate slug
-    const slug = slugify(name, {
+    // Generate unique slug (append short suffix to allow duplicate names)
+    const baseSlug = slugify(name, {
       lower: true,
       strict: true,
     });
+    const slug = `${baseSlug}-${Date.now().toString().slice(-6)}`;
 
     // Generate SKU
     const sku = `SJ-${Date.now()}`;
@@ -64,22 +66,40 @@ exports.getProducts = async (req, res) => {
 
     const skip = (page - 1) * limit;
 
+    // Build search conditions
+    const orConditions = [
+      { name: { $regex: search, $options: "i" } },
+      { sku: { $regex: search, $options: "i" } },
+    ];
+
+    if (!isNaN(search) && search !== "") {
+      orConditions.push({ price: Number(search) });
+    }
+
+    // Also match by category name
+    if (search) {
+      const matchingCategories = await Category.find({
+        name: { $regex: search, $options: "i" },
+        isActive: true,
+      }).select("_id");
+
+      if (matchingCategories.length > 0) {
+        const categoryIds = matchingCategories.map((c) => c._id);
+        orConditions.push({ categoryId: { $in: categoryIds } });
+      }
+    }
+
     const query = {
       $and: [
         { isActive: true },
-        {
-          $or: [
-            { name: { $regex: search, $options: "i" } },
-            { sku: { $regex: search, $options: "i" } },
-            { price: isNaN(search) ? undefined : Number(search) }
-          ].filter(Boolean)
-        }
-      ]
+        { $or: orConditions },
+      ],
     };
 
     const total = await Product.countDocuments(query);
 
     const products = await Product.find(query)
+      .populate("categoryId", "name")
       .skip(skip)
       .limit(limit);
 

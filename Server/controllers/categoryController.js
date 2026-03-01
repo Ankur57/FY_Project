@@ -7,10 +7,14 @@ exports.createCategory = async (req, res) => {
 
     const slug = slugify(name, { lower: true, strict: true });
 
-    const category = await Category.create({
-      name,
-      slug,
-    });
+    const categoryData = { name, slug };
+
+    // If an image was uploaded, save its path
+    if (req.file) {
+      categoryData.image = `/uploads/${req.file.filename}`;
+    }
+
+    const category = await Category.create(categoryData);
 
     res.status(201).json(category);
 
@@ -23,6 +27,30 @@ exports.getCategories = async (req, res) => {
   try {
     const categories = await Category.find({ isActive: true });
     res.json(categories);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Update a category (Admin) — can update name and/or image
+exports.updateCategory = async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.id);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    if (req.body.name) {
+      category.name = req.body.name;
+      category.slug = slugify(req.body.name, { lower: true, strict: true });
+    }
+
+    if (req.file) {
+      category.image = `/uploads/${req.file.filename}`;
+    }
+
+    await category.save();
+    res.json(category);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
