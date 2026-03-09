@@ -12,6 +12,7 @@ const addressRoutes = require("./routes/addressRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const bannerRoutes = require("./routes/bannerRoutes");
 const userRoutes = require("./routes/userRoutes");
+const shipmentRoutes = require("./routes/shipmentRoutes");
 
 dotenv.config();
 connectDB();
@@ -38,6 +39,7 @@ app.use("/api/addresses", addressRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/banners", bannerRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/shipments", shipmentRoutes);
 
 const PORT = process.env.PORT || 5000;
 

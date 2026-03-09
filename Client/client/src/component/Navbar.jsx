@@ -111,19 +111,19 @@ function Navbar() {
                   <Link to="/" className={linkStyle}>
                     Home
                   </Link>
-                  <Link to="/shop" className={linkStyle}>
+                  <Link to="/shop?category=gifts" className={linkStyle}>
                     Gifts
                   </Link>
-                  <Link to="/orders" className={linkStyle}>
+                  <Link to="/shop?category=bangles" className={linkStyle}>
                     Bangles
                   </Link>
-                  <Link to="/" className={linkStyle}>
+                  <Link to="/shop?category=earrings" className={linkStyle}>
                     Earrings
                   </Link>
-                  <Link to="/shop" className={linkStyle}>
+                  <Link to="/shop?category=necklace" className={linkStyle}>
                     Necklace
                   </Link>
-                  <Link to="/orders" className={linkStyle}>
+                  <Link to="/shop?category=rings" className={linkStyle}>
                     Rings
                   </Link>
                 </>
@@ -135,19 +135,19 @@ function Navbar() {
                   <Link to="/" className={linkStyle}>
                     Home
                   </Link>
-                  <Link to="/shop" className={linkStyle}>
+                  <Link to="/shop?category=gifts" className={linkStyle}>
                     Gifts
                   </Link>
-                  <Link to="/orders" className={linkStyle}>
+                  <Link to="/shop?category=bangles" className={linkStyle}>
                     Bangles
                   </Link>
-                  <Link to="/" className={linkStyle}>
+                  <Link to="/shop?category=earrings" className={linkStyle}>
                     Earrings
                   </Link>
-                  <Link to="/shop" className={linkStyle}>
+                  <Link to="/shop?category=necklace" className={linkStyle}>
                     Necklace
                   </Link>
-                  <Link to="/orders" className={linkStyle}>
+                  <Link to="/shop?category=rings" className={linkStyle}>
                     Rings
                   </Link>
                 </>

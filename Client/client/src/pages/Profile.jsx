@@ -122,6 +122,14 @@ function Profile() {
         e.preventDefault();
         setError("");
         setSuccess("");
+
+        // Validate 10-digit mobile number
+        const mobileDigits = addressForm.mobileNumber.replace(/\D/g, "");
+        if (mobileDigits.length !== 10) {
+            setError("Please enter a valid 10-digit mobile number");
+            return;
+        }
+
         setSaving(true);
 
         try {
@@ -255,8 +263,8 @@ function Profile() {
                                         setSuccess("");
                                     }}
                                     className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${activeTab === tab.id
-                                            ? "bg-gradient-to-r from-yellow-50 to-yellow-100/50 text-yellow-800 shadow-sm"
-                                            : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                                        ? "bg-gradient-to-r from-yellow-50 to-yellow-100/50 text-yellow-800 shadow-sm"
+                                        : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
                                         }`}
                                 >
                                     {tab.icon}
@@ -424,6 +432,8 @@ function Profile() {
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Mobile Number</label>
                                                 <input type="tel" value={addressForm.mobileNumber} onChange={(e) => setAddressForm({ ...addressForm, mobileNumber: e.target.value })} required
+                                                    pattern="[0-9]{10}" maxLength={10} title="Please enter a valid 10-digit mobile number"
+                                                    placeholder="10-digit mobile number"
                                                     className="w-full px-4 py-3 bg-gray-50/80 border border-gray-200 rounded-xl text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500 transition-all" />
                                             </div>
                                         </div>

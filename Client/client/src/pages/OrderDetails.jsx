@@ -181,6 +181,7 @@ function OrderDetails() {
           </div>
 
           {/* Return Request Section */}
+          {/*
           {order.orderStatus === "delivered" && (!order.returnRequest || order.returnRequest.status === "none") && (
             <div className="bg-white rounded-2xl shadow-lg shadow-gray-100/50 border border-gray-100/80 p-6">
               <h2 className="text-lg font-serif italic text-gray-800 mb-1">Request a Return</h2>
@@ -230,8 +231,10 @@ function OrderDetails() {
               </div>
             </div>
           )}
+          */}
 
           {/* Return Status */}
+          {/*
           {order.returnRequest && order.returnRequest.status !== "none" && (
             <div className={`rounded-2xl shadow-lg shadow-gray-100/50 border p-6 ${order.returnRequest.status === "approved" || order.returnRequest.status === "refunded"
               ? "bg-green-50 border-green-200"
@@ -257,7 +260,9 @@ function OrderDetails() {
               )}
             </div>
           )}
+            */}
         </div>
+        
 
         {/* Right column — Summary */}
         <div className="space-y-6">

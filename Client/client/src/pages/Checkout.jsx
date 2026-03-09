@@ -46,6 +46,14 @@ function Checkout() {
 
   const handleSaveAddress = async (e) => {
     e.preventDefault();
+
+    // Validate 10-digit mobile number
+    const mobileDigits = addressForm.mobileNumber.replace(/\D/g, "");
+    if (mobileDigits.length !== 10) {
+      setError("Please enter a valid 10-digit mobile number");
+      return;
+    }
+
     setSavingAddress(true);
     try {
       const res = await axios.post("/addresses", addressForm);
@@ -270,8 +278,9 @@ function Checkout() {
                     <input type="text" required placeholder="Full Name" value={addressForm.fullName}
                       onChange={(e) => setAddressForm({ ...addressForm, fullName: e.target.value })}
                       className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500" />
-                    <input type="tel" required placeholder="Mobile Number" value={addressForm.mobileNumber}
+                    <input type="tel" required placeholder="10-digit mobile number" value={addressForm.mobileNumber}
                       onChange={(e) => setAddressForm({ ...addressForm, mobileNumber: e.target.value })}
+                      pattern="[0-9]{10}" maxLength={10} title="Please enter a valid 10-digit mobile number"
                       className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/30 focus:border-yellow-500" />
                   </div>
                   <input type="text" required placeholder="Address Line 1" value={addressForm.addressLine1}

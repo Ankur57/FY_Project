@@ -1,10 +1,11 @@
 import { useEffect, useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import axios from "../api/axios";
 
 const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
 
 function Shop() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,17 @@ function Shop() {
     };
     fetchCategories();
   }, []);
+
+  // ── Read category slug from URL query param ──
+  useEffect(() => {
+    const categorySlug = searchParams.get("category");
+    if (categorySlug && categories.length > 0) {
+      const matched = categories.find((cat) => cat.slug === categorySlug);
+      if (matched) {
+        setSelectedCategory(matched._id);
+      }
+    }
+  }, [searchParams, categories]);
 
   useEffect(() => {
     const fetchProducts = async () => {
