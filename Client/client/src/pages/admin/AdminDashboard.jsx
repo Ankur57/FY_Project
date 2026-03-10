@@ -528,16 +528,24 @@ function AdminDashboard() {
               onClick={() => navigate("/admin/products")}
               color="bg-purple-600"
             />
+            {/* Returns commented out — not needed currently
             <QuickAction
               icon={<ReturnsIcon />}
               label="Returns"
               onClick={() => navigate("/admin/returns")}
               color="bg-rose-500"
             />
+            */}
             <QuickAction
               icon={<OrdersIcon />}
-              label="View All Orders"
-              onClick={() => navigate("/orders")}
+              label="Orders"
+              onClick={() => navigate("/admin/orders")}
+              color="bg-amber-600"
+            />
+            <QuickAction
+              icon={<OrdersIcon />}
+              label="All Orders"
+              onClick={() => navigate("/admin/all-orders")}
               color="bg-emerald-600"
             />
           </div>

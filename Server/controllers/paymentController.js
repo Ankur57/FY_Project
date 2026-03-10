@@ -3,7 +3,6 @@ const razorpay = require("../config/razorpay");
 const Order = require("../models/Order");
 const Payment = require("../models/Payment");
 const User = require("../models/User");
-const { createShipment } = require("../controllers/shipmentController");
 const { sendEmail } = require("../services/emailService");
 const { orderConfirmationEmail } = require("../services/emailTemplates");
 
@@ -126,15 +125,7 @@ exports.verifyPayment = async (req, res) => {
       // Do NOT fail payment if email fails
     }
 
-    // 🚚 Create Shipment Automatically
-    try {
-      await createShipment(order);
-    } catch (shipmentError) {
-      console.error("Shipment creation failed:", shipmentError.message);
-      // Do NOT fail payment if shipment fails
-    }
-
-    res.json({ message: "Payment verified and shipment initiated" });
+    res.json({ message: "Payment verified successfully" });
 
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -11,7 +11,7 @@ exports.createCategory = async (req, res) => {
 
     // If an image was uploaded, save its path
     if (req.file) {
-      categoryData.image = `/uploads/${req.file.filename}`;
+      categoryData.image = req.file.path;
     }
 
     const category = await Category.create(categoryData);
@@ -46,7 +46,7 @@ exports.updateCategory = async (req, res) => {
     }
 
     if (req.file) {
-      category.image = `/uploads/${req.file.filename}`;
+      category.image = req.file.path;
     }
 
     await category.save();

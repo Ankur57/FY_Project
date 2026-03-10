@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Cart() {
   const navigate = useNavigate();
@@ -123,7 +123,7 @@ function Cart() {
               const subtotal = item.quantity * item.priceAtTime;
               const isUpdating = updating === product._id;
               const image = product.images && product.images.length > 0
-                ? `${IMAGE_BASE_URL}${product.images[0]}`
+                ? getImageUrl(product.images[0])
                 : "https://via.placeholder.com/200x200?text=No+Image";
 
               return (

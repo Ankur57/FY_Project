@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 const statusConfig = {
   pending: { label: "Pending", color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200", icon: "⏳" },
@@ -161,11 +161,19 @@ function OrderDetails() {
           <div className="bg-white rounded-2xl shadow-lg shadow-gray-100/50 border border-gray-100/80 p-6">
             <h2 className="text-lg font-serif italic text-gray-800 mb-4">Order Items</h2>
             <div className="divide-y divide-gray-100">
-              {order.items.map((item, i) => (
+              {order.items.map((item, i) => {
+                const productImg = item.productId?.images?.[0];
+                return (
                 <div key={i} className="flex items-center gap-4 py-3 first:pt-0 last:pb-0">
-                  <Link to={`/product/${item.productId}`} className="flex-shrink-0">
-                    <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-100">
-                      <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" /></svg>
+                  <Link to={`/product/${item.productId?._id || item.productId}`} className="flex-shrink-0">
+                    <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-100 bg-white">
+                      {productImg ? (
+                        <img src={getImageUrl(productImg)} alt={item.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <svg className="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9" />
+                        </svg>
+                      )}
                     </div>
                   </Link>
                   <div className="flex-1 min-w-0">
@@ -176,7 +184,8 @@ function OrderDetails() {
                     {formatPrice(item.quantity * item.priceAtTime)}
                   </p>
                 </div>
-              ))}
+              );
+              })}
             </div>
           </div>
 

@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import axios from "../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Shop() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -357,7 +357,7 @@ function Shop() {
                       <img
                         src={
                           product.images && product.images.length > 0
-                            ? `${IMAGE_BASE_URL}${product.images[0]}`
+                            ? getImageUrl(product.images[0])
                             : "https://via.placeholder.com/600x600?text=No+Image"
                         }
                         alt={product.name}

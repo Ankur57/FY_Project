@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Product() {
   const { id } = useParams();
@@ -151,7 +151,7 @@ function Product() {
                     }`}
                 >
                   <img
-                    src={`${IMAGE_BASE_URL}${img}`}
+                    src={getImageUrl(img)}
                     alt={`${product.name} ${i + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -165,7 +165,7 @@ function Product() {
             <div className="aspect-square rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 shadow-sm">
               {images.length > 0 ? (
                 <img
-                  src={`${IMAGE_BASE_URL}${images[selectedImage]}`}
+                  src={getImageUrl(images[selectedImage])}
                   alt={product.name}
                   className="w-full h-full object-cover cursor-zoom-in hover:scale-105 transition-transform duration-500"
                 />

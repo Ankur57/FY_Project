@@ -290,7 +290,7 @@ exports.requestReturn = async (req, res) => {
 
     order.returnRequest = {
       reason,
-      images: [`/uploads/${req.file.filename}`],
+      images: [req.file.path],
       requestedAt: new Date(),
       status: "requested",
     };
@@ -445,7 +445,9 @@ exports.getOrderById = async (req, res) => {
     const order = await Order.findOne({
       _id: req.params.orderId,
       userId: req.user._id,
-    }).populate("paymentId");
+    })
+      .populate("paymentId")
+      .populate("items.productId", "images");
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });

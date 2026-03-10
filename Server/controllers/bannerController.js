@@ -17,7 +17,7 @@ exports.addBanner = async (req, res) => {
             return res.status(400).json({ message: "Image is required" });
         }
 
-        const imagePath = `/uploads/${req.file.filename}`;
+        const imagePath = req.file.path;
 
         // Set order to be after the last existing banner
         const lastBanner = await Banner.findOne().sort({ order: -1 });
@@ -45,7 +45,7 @@ exports.updateBanner = async (req, res) => {
 
         // Replace image if new one uploaded
         if (req.file) {
-            banner.image = `/uploads/${req.file.filename}`;
+            banner.image = req.file.path;
         }
 
         // Update order if provided

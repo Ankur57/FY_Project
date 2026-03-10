@@ -35,7 +35,7 @@ exports.addProduct = async (req, res) => {
 
     if (req.files && req.files.length > 0) {
       imagePaths = req.files.map(
-        (file) => `/uploads/${file.filename}`
+        (file) => file.path
       );
     }
 
@@ -150,12 +150,30 @@ exports.updateProduct = async (req, res) => {
     product.categoryId = categoryId || product.categoryId;
     product.stock = stock || product.stock;
 
-    // If new images uploaded → replace
-    if (req.files && req.files.length > 0) {
-      product.images = req.files.map(
-        (file) => `/uploads/${file.filename}`
-      );
+    // Handle images: merge kept existing images with newly uploaded ones
+    let updatedImages = [];
+
+    // Parse existing images the admin chose to keep
+    if (req.body.existingImages) {
+      try {
+        updatedImages = JSON.parse(req.body.existingImages);
+      } catch (e) {
+        updatedImages = [];
+      }
+    } else {
+      // If existingImages wasn't sent, keep all current images
+      updatedImages = product.images || [];
     }
+
+    // Append newly uploaded images
+    if (req.files && req.files.length > 0) {
+      const newImagePaths = req.files.map(
+        (file) => file.path
+      );
+      updatedImages = [...updatedImages, ...newImagePaths];
+    }
+
+    product.images = updatedImages;
 
     await product.save();
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../../utils/imageHelper";
 
 function AdminReturns() {
   const [returns, setReturns] = useState([]);
@@ -94,12 +94,12 @@ function AdminReturns() {
             {order.returnRequest?.images?.map((img, index) => (
               <a
                 key={index}
-                href={`${IMAGE_BASE_URL}${img}`}
+                href={getImageUrl(img)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <img
-                  src={`${IMAGE_BASE_URL}${img}`}
+                  src={getImageUrl(img)}
                   alt="Return"
                   className="w-32 h-32 object-cover border rounded cursor-pointer hover:scale-105 transition"
                 />

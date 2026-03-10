@@ -11,7 +11,7 @@ import seasonDemiFine from "../assets/season_demi_fine.png";
 import seasonChokers from "../assets/season_chokers.png";
 import seasonTemple from "../assets/season_temple.png";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Home() {
   const { user } = useAuth();
@@ -214,7 +214,7 @@ function Home() {
             {banners.map((banner) => (
               <div key={banner._id} className="w-full flex-shrink-0">
                 <img
-                  src={`${IMAGE_BASE_URL}${banner.image}`}
+                  src={getImageUrl(banner.image)}
                   alt="Banner"
                   className="w-full h-[250px] sm:h-[350px] md:h-[450px] lg:h-[550px] object-cover"
                 />
@@ -313,7 +313,7 @@ function Home() {
                     >
                       {/* Thumbnail */}
                       <img
-                        src={`${IMAGE_BASE_URL}${banner.image}`}
+                        src={getImageUrl(banner.image)}
                         alt={`Banner ${idx + 1}`}
                         className="w-24 h-16 sm:w-32 sm:h-20 object-cover rounded-lg flex-shrink-0"
                       />
@@ -425,7 +425,7 @@ function Home() {
                   <div className="aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 group-hover:border-yellow-200 transition-all duration-300">
                     {cat.image ? (
                       <img
-                        src={`${IMAGE_BASE_URL}${cat.image}`}
+                        src={getImageUrl(cat.image)}
                         alt={cat.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
@@ -556,7 +556,7 @@ function Home() {
                   <div className="aspect-square bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 group-hover:border-yellow-200 transition-all duration-300 relative">
                     {product.images && product.images.length > 0 ? (
                       <img
-                        src={`${IMAGE_BASE_URL}${product.images[0]}`}
+                        src={getImageUrl(product.images[0])}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />

@@ -1,14 +1,14 @@
 const multer = require("multer");
 const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueName =
-      Date.now() + "-" + file.originalname;
-    cb(null, uniqueName);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "soandita",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "gif", "jfif"],
+    transformation: [{ width: 1200, crop: "limit", quality: "auto" }],
   },
 });
 

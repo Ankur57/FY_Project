@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 import logo from "../assets/soandita-logo.png";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -165,8 +165,8 @@ function Navbar() {
                   <Link to="/admin/products" className={linkStyle}>
                     Products
                   </Link>
-                  <Link to="/admin/returns" className={linkStyle}>
-                    Returns
+                  <Link to="/admin/orders" className={linkStyle}>
+                    Orders
                   </Link>
                 </>
               )}
@@ -299,7 +299,7 @@ function Navbar() {
                               <img
                                 src={
                                   product.images && product.images.length > 0
-                                    ? `${IMAGE_BASE_URL}${product.images[0]}`
+                                    ? getImageUrl(product.images[0])
                                     : "https://via.placeholder.com/60"
                                 }
                                 alt={product.name}
@@ -554,7 +554,7 @@ function Navbar() {
                       <img
                         src={
                           product.images && product.images.length > 0
-                            ? `${IMAGE_BASE_URL}${product.images[0]}`
+                            ? getImageUrl(product.images[0])
                             : "https://via.placeholder.com/60"
                         }
                         alt={product.name}

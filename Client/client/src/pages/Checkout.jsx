@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
 
-const IMAGE_BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL;
+import { getImageUrl } from "../utils/imageHelper";
 
 function Checkout() {
   const navigate = useNavigate();
@@ -325,7 +325,7 @@ function Checkout() {
               {cart.items.map((item) => {
                 const product = item.productId;
                 const image = product.images?.length > 0
-                  ? `${IMAGE_BASE_URL}${product.images[0]}`
+                  ? getImageUrl(product.images[0])
                   : "https://via.placeholder.com/100x100?text=No+Image";
 
                 return (

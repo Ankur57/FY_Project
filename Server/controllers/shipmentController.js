@@ -4,8 +4,32 @@ const Order = require("../models/Order");
 const { getToken, refreshToken } = require("../services/shiprocketService");
 
 
-exports.createShipment = async (order) => {
+// ── Admin creates shipment with weight/dimensions ──
+exports.createShipment = async (req, res) => {
   try {
+    const { orderId, weight, length, breadth, height } = req.body;
+
+    // Validate inputs
+    if (!orderId || !weight || !length || !breadth || !height) {
+      return res.status(400).json({ message: "orderId, weight, length, breadth, and height are required" });
+    }
+
+    const order = await Order.findById(orderId).populate("userId", "name email");
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    if (order.orderStatus !== "paid") {
+      return res.status(400).json({ message: `Order status is "${order.orderStatus}" — only "paid" orders can be shipped` });
+    }
+
+    // Check if a shipment already exists for this order
+    const existingShipment = await Shipment.findOne({ orderId: order._id });
+    if (existingShipment) {
+      return res.status(400).json({ message: "Shipment already exists for this order" });
+    }
+
     const fullName = order.addressSnapshot.fullName.trim();
     const nameParts = fullName.split(" ");
     const firstName = nameParts[0];
@@ -34,10 +58,10 @@ exports.createShipment = async (order) => {
       })),
       payment_method: "Prepaid",
       sub_total: order.totalAmount,
-      length: 10,
-      breadth: 10,
-      height: 10,
-      weight: 0.5,
+      length: parseFloat(length),
+      breadth: parseFloat(breadth),
+      height: parseFloat(height),
+      weight: parseFloat(weight),
     };
 
     let response;
@@ -59,7 +83,11 @@ exports.createShipment = async (order) => {
           { headers: { Authorization: `Bearer ${newToken}` } }
         );
       } else {
-        throw err;
+        console.error("Shiprocket Error:", err.response?.data || err.message);
+        return res.status(500).json({
+          message: "Failed to create Shiprocket order",
+          error: err.response?.data || err.message,
+        });
       }
     }
 
@@ -76,10 +104,14 @@ exports.createShipment = async (order) => {
     order.orderStatus = "shipped";
     await order.save();
 
-    return shipment;
+    res.status(201).json({
+      message: "Shipment created successfully",
+      shipment,
+    });
 
   } catch (error) {
-    console.error("Shiprocket Error:", error.response?.data || error.message);
+    console.error("Create Shipment Error:", error.message);
+    res.status(500).json({ message: error.message });
   }
 };
 

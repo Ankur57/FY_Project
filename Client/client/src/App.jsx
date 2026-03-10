@@ -9,6 +9,8 @@ import Checkout from "./pages/Checkout";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import AdminReturns from "./pages/admin/AdminReturns";
+import AdminOrders from "./pages/admin/AdminOrders";
+import AdminAllOrders from "./pages/admin/AdminAllOrders";
 import ProtectedRoute from "./component/ProtectedRoute";
 import AdminRoute from "./component/AdminRoute";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -89,6 +91,18 @@ function App() {
           <Route path="/admin/returns" element={
             <AdminRoute>
               <AdminReturns />
+            </AdminRoute>
+          }
+          />
+          <Route path="/admin/orders" element={
+            <AdminRoute>
+              <AdminOrders />
+            </AdminRoute>
+          }
+          />
+          <Route path="/admin/all-orders" element={
+            <AdminRoute>
+              <AdminAllOrders />
             </AdminRoute>
           }
           />
