@@ -64,7 +64,9 @@ exports.registerUser = async (req, res) => {
 
     // Send OTP email
     const emailContent = registrationOtpEmail(name, otp);
-    await sendEmail(email, emailContent.subject, emailContent.html);
+    await sendEmail(email, emailContent.subject, emailContent.html).catch(err =>
+      console.error("Email error:", err)
+    );;
 
     res.status(200).json({
       message: "OTP sent to your email. Please verify to complete registration.",
@@ -211,7 +213,9 @@ exports.forgotPassword = async (req, res) => {
     await user.save();
 
     const emailContent = forgotPasswordOtpEmail(user.name, otp);
-    await sendEmail(email, emailContent.subject, emailContent.html);
+    await sendEmail(email, emailContent.subject, emailContent.html).catch(err =>
+      console.error("Email error:", err)
+    );;
 
     res.json({ message: "Password reset OTP sent to your email.", email });
   } catch (error) {
