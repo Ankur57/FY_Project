@@ -101,6 +101,7 @@ function Home() {
   // ── Touch/swipe ──
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
   };
 
   const handleTouchMove = (e) => {
@@ -108,11 +109,14 @@ function Home() {
   };
 
   const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
     const diff = touchStartX.current - touchEndX.current;
     if (Math.abs(diff) > 50) {
       if (diff > 0) goNext();
       else goPrev();
     }
+    touchStartX.current = 0;
+    touchEndX.current = 0;
   };
 
   // ── Admin: Upload new banner ──
@@ -225,7 +229,12 @@ function Home() {
           {/* Left arrow */}
           {banners.length > 1 && (
             <button
-              onClick={goPrev}
+              onClick={(e) => {
+                e.stopPropagation();
+                goPrev();
+              }}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
               className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transition-all z-10"
               aria-label="Previous slide"
             >
@@ -238,7 +247,12 @@ function Home() {
           {/* Right arrow */}
           {banners.length > 1 && (
             <button
-              onClick={goNext}
+              onClick={(e) => {
+                e.stopPropagation();
+                goNext();
+              }}
+              onTouchStart={(e) => e.stopPropagation()}
+              onTouchEnd={(e) => e.stopPropagation()}
               className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg backdrop-blur-sm transition-all z-10"
               aria-label="Next slide"
             >
@@ -254,7 +268,12 @@ function Home() {
               {banners.map((_, idx) => (
                 <button
                   key={idx}
-                  onClick={() => goTo(idx)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goTo(idx);
+                  }}
+                  onTouchStart={(e) => e.stopPropagation()}
+                  onTouchEnd={(e) => e.stopPropagation()}
                   className={`rounded-full transition-all duration-300 ${idx === current
                     ? "w-8 h-3 bg-yellow-700"
                     : "w-3 h-3 bg-white/60 hover:bg-white/90"

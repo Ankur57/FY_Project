@@ -213,6 +213,9 @@ function Footer() {
           <p className="text-gray-500 text-xs">
             © 2026 Soandita Jewels. All rights reserved.
           </p>
+          <p className="text-gray-500 text-xs">
+            Developed by Ankur Bajpai | ankurbajpai100@gmail.com
+          </p>
           <div className="flex gap-6">
             <Link
               to="/"

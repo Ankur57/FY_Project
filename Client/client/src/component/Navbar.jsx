@@ -669,11 +669,11 @@ function Navbar() {
                   Products
                 </Link>
                 <Link
-                  to="/admin/returns"
+                  to="/admin/orders"
                   onClick={() => setMobileOpen(false)}
                   className={linkStyle}
                 >
-                  Returns
+                  Orders
                 </Link>
               </>
             )}
